@@ -1,110 +1,123 @@
-# 🩺 Diabetes Risk Prediction System (Machine Learning)
+# GlucoSense — Diabetes Risk Screening Demonstration
 
-A fully working end-to-end ML project: trains a classifier on the **Pima Indians
-Diabetes Dataset**, and serves live predictions through a **Streamlit web app**.
+GlucoSense is an academic machine-learning demonstration that estimates a diabetes-related class probability from eight input features and explains an individual model output with SHAP.
 
----
+**Important:** GlucoSense is not clinically validated. It is not a medical device and must not be used to diagnose, treat, or make healthcare decisions.
 
-## 📁 Project Files
-| File | Purpose |
-|---|---|
-| `diabetes.csv` | Dataset (768 patient records, 8 features + outcome) |
-| `train_model.py` | Cleans data, trains & compares models, saves best one |
-| `diabetes_model.pkl` | Trained Random Forest model (already generated) |
-| `scaler.pkl` | Feature scaler used before prediction |
-| `feature_names.pkl` | Ordered list of input feature names |
-| `app.py` | Streamlit web app — 3 tabs: Global Picture, Predict Risk, How the Model Works |
-| `world_data.py` | Real global diabetes statistics (IDF Diabetes Atlas 2025) used in the dashboard |
-| `sample_profiles.py` | Pre-filled demo patient profiles for quick, no-typing demos |
-| `requirements.txt` | Python dependencies |
+## Active application architecture
 
-### What's new in the UI
-- **🌍 Global Picture tab** — world diabetes stats (589M cases, regional breakdown chart,
-  historical trend, top countries) sourced from the IDF Diabetes Atlas 2025, styled as a dashboard.
-- **🔍 Predict Risk tab** — dropdown of 5 ready-made sample profiles (healthy, borderline,
-  high-risk, athlete, senior with family history) so you can demo instantly without typing values,
-  plus a risk gauge chart and feature-importance chart per prediction.
-- **📊 How the Model Works tab** — performance metrics, pipeline steps, and feature descriptions
-  for anyone (like a judge or professor) who wants the technical details.
-- Custom teal/amber color theme, card-based layout, and a gradient hero header.
+- **Frontend:** React + Vite (`frontend/`)
+- **Backend:** FastAPI (`backend/`)
+- **Machine learning:** scikit-learn pipelines
+- **Explainability:** SHAP TreeExplainer
+- **Dataset:** `diabetes.csv` (Pima Indians Diabetes Dataset)
 
-Model performance (already trained, ready to use):
-- **Accuracy:** ~73%
-- **ROC-AUC:** ~0.81
-- **Model used:** Random Forest (beat Logistic Regression on F1-score)
+The active application is the React + FastAPI version. The root-level `app.py`, `train_model.py`, `diabetes_model.pkl`, `scaler.pkl`, and `feature_names.pkl` belong to an earlier Streamlit implementation and are retained as legacy files. They are not used by the current React + FastAPI application.
 
----
+## Project structure
 
-## 🚀 Run It Locally RIGHT NOW (for tonight's prep / rehearsal)
-
-1. Install Python 3.9+ if you don't have it.
-2. Open a terminal in this folder and run:
-   ```bash
-   pip install -r requirements.txt
-   streamlit run app.py
-   ```
-3. It will open automatically at `http://localhost:8501` in your browser.
-4. Enter patient details on the form and click **Predict Diabetes Risk**.
-
-That's it — you now have a fully working local demo you can show tomorrow even without internet.
-
----
-
-## 🌐 Deploy It for FREE (so you have a live link too)
-
-### Option A: Streamlit Community Cloud (recommended, easiest, free forever)
-
-1. Create a free GitHub account if you don't have one: https://github.com
-2. Create a **new public repository** (e.g. `diabetes-predictor`).
-3. Upload these files to the repo:
-   - `app.py`
-   - `requirements.txt`
-   - `diabetes_model.pkl`
-   - `scaler.pkl`
-   - `feature_names.pkl`
-   - `diabetes.csv` (optional, only needed if you want to retrain)
-4. Go to https://streamlit.io/cloud and sign in with GitHub.
-5. Click **"New app"** → select your repo → set main file path to `app.py` → **Deploy**.
-6. Wait 1–2 minutes. You'll get a public link like:
-   `https://your-app-name.streamlit.app`
-7. Share this link — it works from any device, no install needed.
-
-This is completely free with no credit card required, and perfect for a mini-project demo.
-
-### Option B: Hugging Face Spaces (also free, alternative if Streamlit Cloud is slow)
-
-1. Create a free account at https://huggingface.co
-2. Click **New Space** → choose **Streamlit** as the SDK → name it → Create.
-3. Upload the same files (`app.py`, `requirements.txt`, `.pkl` files).
-4. It auto-builds and gives you a public URL like `https://huggingface.co/spaces/username/space-name`.
-
-### Option C: Just run it locally during your presentation
-If you're presenting in person/on your own laptop, Option A (`streamlit run app.py`) is
-enough — no deployment needed at all, and it looks exactly the same.
-
----
-
-## 🎤 What to Say in Your Presentation (quick script)
-
-1. **Problem**: Diabetes is a growing health issue; early risk prediction can help
-   with preventive care.
-2. **Data**: Pima Indians Diabetes Dataset — 768 patients, 8 clinical features
-   (glucose, BMI, blood pressure, age, etc.)
-3. **Approach**:
-   - Cleaned data (handled invalid zero values via median imputation)
-   - Scaled features with StandardScaler
-   - Trained & compared Logistic Regression vs Random Forest
-   - Selected Random Forest (better F1-score, handles non-linear patterns)
-4. **Results**: ~73% accuracy, 0.81 ROC-AUC on held-out test data
-5. **Demo**: Show the live Streamlit app — enter values, get prediction + probability
-   + a feature importance chart explaining *why*.
-6. **Future scope**: More data, deep learning models, integration with real EHR
-   systems, mobile app, doctor-facing dashboard.
-
----
-
-## 🔁 To Retrain the Model (optional, not needed to demo)
-```bash
-python train_model.py
+```text
+Glucosense/
+├── backend/
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── routes/predict.py
+│   │   ├── schemas/patient.py
+│   │   └── services/
+│   │       ├── model_training.py
+│   │       ├── prediction.py
+│   │       └── explainability.py
+│   ├── artifacts/
+│   │   ├── glucosense_model.joblib
+│   │   └── metrics.json
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── vite.config.js
+├── diabetes.csv
+└── README.md
 ```
-This regenerates `diabetes_model.pkl`, `scaler.pkl`, and `feature_names.pkl`.
+
+## Run locally
+
+### 1. Backend
+
+From the project root:
+
+```bash
+# Activate your Python environment first, if you use Conda.
+pip install -r backend/requirements.txt
+
+# Start the API
+uvicorn backend.app.main:app --reload
+```
+
+The API runs at `http://127.0.0.1:8000`.
+
+Useful endpoints:
+- `GET /` — API status
+- `GET /health` — health check
+- `GET /api/model-info` — model and evaluation information
+- `POST /api/predict` — patient prediction and optional SHAP explanation
+
+Interactive API documentation: `http://127.0.0.1:8000/docs`.
+
+### 2. Frontend
+
+Open a second terminal:
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+Open the Vite URL shown in the terminal (normally `http://localhost:5173`).
+
+## Retrain the model
+
+From the project root, with backend dependencies installed:
+
+```bash
+python -m backend.app.services.model_training
+```
+
+This creates/updates:
+- `backend/artifacts/glucosense_model.joblib`
+- `backend/artifacts/metrics.json`
+
+The training workflow uses a stratified held-out test split, preprocessing pipelines, and stratified cross-validation on the training partition. Candidate models are selected using cross-validation F1, and final metrics are calculated on the held-out test partition.
+
+**Dependency compatibility:** the saved scikit-learn artifact was generated with scikit-learn 1.9.1. The backend requirements pin that version because scikit-learn does not guarantee that serialized estimators are compatible across versions. If you retrain with a different scikit-learn version, regenerate the artifact in that same environment and keep the runtime version aligned.
+
+## Model inputs
+
+1. Pregnancies
+2. Glucose
+3. BloodPressure
+4. SkinThickness
+5. Insulin
+6. BMI
+7. DiabetesPedigreeFunction
+8. Age
+
+The training and inference pipelines treat zero values in Glucose, BloodPressure, SkinThickness, Insulin, and BMI as missing and impute them using the training-fitted median imputer.
+
+## Evaluation
+
+The application displays:
+- Cross-validation results for Logistic Regression, Random Forest, and Gradient Boosting
+- Held-out test accuracy, precision, recall, F1 score, and ROC-AUC
+- Held-out test confusion matrix
+- Individual SHAP feature contributions
+
+Cross-validation results and held-out test results are different evaluation stages and should be reported separately. Metrics describe performance on this dataset and do not establish clinical validity.
+
+## Limitations and future work
+
+- Evaluate on broader, independently sourced datasets.
+- Assess calibration, subgroup performance, and fairness.
+- Validate explanations and model stability.
+- Conduct appropriate clinical validation before any real-world healthcare use.
+- Add secure, consent-based assessment history only if persistence is introduced.

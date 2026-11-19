@@ -1,0 +1,87 @@
+{
+  "model": "Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),\n                ('classifier',\n                 RandomForestClassifier(class_weight='balanced', max_depth=6,\n                                        min_samples_leaf=3, n_estimators=300,\n                                        n_jobs=-1, random_state=42))])",
+  "model_name": "Random Forest",
+  "features": [
+    "Pregnancies",
+    "Glucose",
+    "BloodPressure",
+    "SkinThickness",
+    "Insulin",
+    "BMI",
+    "DiabetesPedigreeFunction",
+    "Age"
+  ],
+  "cross_validation": [
+    {
+      "model": "Logistic Regression",
+      "accuracy": 0.7622,
+      "precision": 0.6486,
+      "recall": 0.701,
+      "f1": 0.6724,
+      "roc_auc": 0.8444
+    },
+    {
+      "model": "Random Forest",
+      "accuracy": 0.7606,
+      "precision": 0.633,
+      "recall": 0.7523,
+      "f1": 0.6868,
+      "roc_auc": 0.8382
+    },
+    {
+      "model": "Gradient Boosting",
+      "accuracy": 0.7703,
+      "precision": 0.7101,
+      "recall": 0.5795,
+      "f1": 0.6369,
+      "roc_auc": 0.8296
+    }
+  ],
+  "test_metrics": {
+    "accuracy": 0.7337662337662337,
+    "precision": 0.5942028985507246,
+    "recall": 0.7592592592592593,
+    "f1": 0.6666666666666666,
+    "roc_auc": 0.8198148148148149,
+    "confusion_matrix": [
+      [
+        72,
+        28
+      ],
+      [
+        13,
+        41
+      ]
+    ],
+    "classification_report": {
+      "0": {
+        "precision": 0.8470588235294118,
+        "recall": 0.72,
+        "f1-score": 0.7783783783783784,
+        "support": 100.0
+      },
+      "1": {
+        "precision": 0.5942028985507246,
+        "recall": 0.7592592592592593,
+        "f1-score": 0.6666666666666666,
+        "support": 54.0
+      },
+      "accuracy": 0.7337662337662337,
+      "macro avg": {
+        "precision": 0.7206308610400682,
+        "recall": 0.7396296296296296,
+        "f1-score": 0.7225225225225225,
+        "support": 154.0
+      },
+      "weighted avg": {
+        "precision": 0.7583950576277941,
+        "recall": 0.7337662337662337,
+        "f1-score": 0.7392067392067392,
+        "support": 154.0
+      }
+    },
+    "test_samples": 154,
+    "positive_samples": 54,
+    "negative_samples": 100
+  }
+}
